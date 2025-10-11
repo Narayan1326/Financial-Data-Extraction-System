@@ -3,7 +3,6 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![Django](https://img.shields.io/badge/Django-4.2.7-green.svg)](https://djangoproject.com)
 [![Flask](https://img.shields.io/badge/Flask-2.3.3-red.svg)](https://flask.palletsprojects.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A comprehensive system for extracting structured financial data from PDF bank statements using AI/ML techniques. This application automatically parses bank statements, categorizes transactions, and provides powerful querying capabilities.
 
@@ -180,10 +179,6 @@ ai-financial-extractor/
 - `category`: Transaction category (food, shopping, transport, etc.)
 - `transaction_type`: Credit or debit
 - `confidence_score`: ML confidence score
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
