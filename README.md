@@ -1,57 +1,51 @@
 # AI-Powered Financial Data Extraction System
 
-A comprehensive system for extracting structured financial data from PDF bank statements using AI/ML techniques.
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
+[![Django](https://img.shields.io/badge/Django-4.2.7-green.svg)](https://djangoproject.com)
+[![Flask](https://img.shields.io/badge/Flask-2.3.3-red.svg)](https://flask.palletsprojects.com)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Architecture
+A comprehensive system for extracting structured financial data from PDF bank statements using AI/ML techniques. This application automatically parses bank statements, categorizes transactions, and provides powerful querying capabilities.
 
-- **Frontend**: Flask web application for user interface
+## 🚀 Features
+
+- 📤 **PDF Upload**: Upload bank statements in PDF format
+- 🤖 **AI-Powered Extraction**: Automatic transaction parsing using ML algorithms
+- 🏷️ **Smart Categorization**: Automatic category classification (Food, Shopping, Transport, etc.)
+- 🔍 **Advanced Querying**: Filter transactions by date, category, amount, and more
+- 📊 **Analytics Dashboard**: Monthly summaries and spending insights
+- 🏦 **Multi-Bank Support**: Supports HDFC, Indian Bank, and generic bank formats
+- 🔒 **Secure Processing**: Local data processing with no external API calls
+
+## 🏗️ Architecture
+
+- **Frontend**: Flask web application with modern UI
 - **Backend**: Django REST API for data processing
-- **Database**: SQLite (default) or PostgreSQL
+- **Database**: SQLite (default) with PostgreSQL support
 - **ML/NLP**: Custom models for transaction parsing and categorization
+- **PDF Processing**: pdfplumber and PyPDF2 for robust text extraction
 
-## Features
+## 📋 Prerequisites
 
-- 📤 PDF bank statement upload
-- 🤖 AI-powered transaction extraction
-- 🏷️ Automatic category classification
-- 🔍 Advanced querying and filtering
-- 📊 Monthly summaries and analytics
-- 🔒 User data isolation
-
-## Quick Start
-
-### Prerequisites
-
-- Python 3.8+
+- Python 3.8 or higher
 - pip (Python package manager)
+- Git
 
-### Installation
+## 🛠️ Installation
 
-#### Quick Start (Recommended)
+### Quick Start
+
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd Finance
+   git clone https://github.com/yourusername/ai-financial-extractor.git
+   cd ai-financial-extractor
    ```
 
-2. **Start all services automatically**
-   
-   **For Windows:**
-   ```bash
-   start_all.bat
-   ```
-   
-   **For Windows (PowerShell):**
-   ```bash
-   .\start_all.bat
-   ```
-
-#### Manual Setup
-
-1. **Setup Backend (Django)**
+2. **Setup Backend (Django)**
    ```bash
    cd backend
-   # Create virtual environment (if not exists)
+   
+   # Create virtual environment
    python -m venv venv
    
    # Activate virtual environment
@@ -66,119 +60,138 @@ A comprehensive system for extracting structured financial data from PDF bank st
    # Run migrations
    python manage.py migrate
    
-   # Start server
-   python manage.py runserver 0.0.0.0:8000
+   # Start backend server
+   python manage.py runserver
    ```
-   
-   Backend will run on http://localhost:8000
 
-2. **Setup Frontend (Flask)**
+3. **Setup Frontend (Flask)**
    ```bash
    cd ../frontend
-   # Create virtual environment (if not exists)
-   python -m venv venv
    
-   # Activate virtual environment
-   # Windows:
-   venv\Scripts\activate
-   # Linux/Mac:
-   source venv/bin/activate
+   # Use the same virtual environment or create new one
+   # If using same venv, just activate it
+   # If creating new one:
+   python -m venv venv
+   venv\Scripts\activate  # Windows
+   # source venv/bin/activate  # Linux/Mac
    
    # Install dependencies
    pip install -r requirements.txt
    
-   # Start server
+   # Start frontend server
    python app.py
    ```
-   
-   Frontend will run on http://localhost:5000
 
-#### Using Docker (Alternative)
+4. **Access the Application**
+   - Frontend: http://localhost:5000
+   - Backend API: http://localhost:8000
+
+### Using Docker (Alternative)
+
 ```bash
 docker-compose up --build
 ```
 
-### Usage ###
+## 🎯 Usage
 
-1.Access the application at http://localhost:5000
-2.Upload a PDF bank statement using the upload interface
-3.Query transactions using the query interface
-4.View analytics and monthly summaries
+### Web Interface
 
-**API Endpoints**
+1. **Upload PDF**: Navigate to http://localhost:5000/upload and upload your bank statement
+2. **View Results**: Processed transactions will be displayed with categories
+3. **Search & Filter**: Use the query interface to filter transactions
+4. **Analytics**: View monthly summaries and spending patterns
 
-### Transactions
-1. GET /api/transactions/ - List all transactions
-2. POST /api/transactions/upload_pdf/ - Upload and extract PDF
-3. GET /api/transactions/monthly_summary/ - Get monthly summary
-4. GET /api/transactions/by_category/ - Filter by category
+### API Endpoints
 
-### Query Parameters
-1. month - Filter by month (1-12)
-2. year - Filter by year
-3. category - Filter by category
-4. type - Filter by transaction type
+#### Transaction Management
+- `GET /api/categories/` - Get available transaction categories
+- `POST /api/upload-pdf/` - Upload and process PDF bank statement
+- `POST /api/search-transactions/` - Search transactions with filters
 
-**Project Structure**
+#### Query Parameters
+- `date_from` - Filter transactions from date (YYYY-MM-DD)
+- `date_to` - Filter transactions to date (YYYY-MM-DD)
+- `category` - Filter by category (food, shopping, transport, etc.)
+- `min_amount` - Minimum transaction amount
+- `max_amount` - Maximum transaction amount
+- `transaction_type` - Filter by type (credit/debit)
 
-Finance/
-├── frontend/                 # Flask application
-├── backend/                  # Django application
-├── data/                     # Sample PDFs
-├── docker-compose.yml        # Docker configuration
-├── start_*.bat              # Windows startup scripts
-└── README.md
+## 📁 Project Structure
 
-**ML Components**
-PDF Extraction
-Uses pdfplumber and PyPDF2 for robust text extraction
+```
+ai-financial-extractor/
+├── backend/                    # Django REST API
+│   ├── extraction_app/         # Main Django app
+│   │   ├── ml_services/        # ML processing modules
+│   │   │   ├── pdf_extractor.py
+│   │   │   ├── transaction_parser.py
+│   │   │   └── category_classifier.py
+│   │   ├── models.py           # Database models
+│   │   ├── views.py            # API views
+│   │   └── serializers.py      # Data serializers
+│   ├── financial_extraction/   # Django project settings
+│   ├── requirements.txt        # Backend dependencies
+│   └── manage.py              # Django management script
+├── frontend/                   # Flask web application
+│   ├── templates/              # HTML templates
+│   ├── static/                 # CSS and JavaScript
+│   ├── app.py                 # Flask application
+│   └── requirements.txt       # Frontend dependencies
+├── data/                       # Sample data and PDFs
+│   ├── sample_pdfs/           # Sample bank statements
+│   └── extracted/             # Processed data
+├── docker-compose.yml         # Docker configuration
+└── README.md                  # This file
+```
 
-Multiple regex patterns for different bank formats
+## 🤖 ML Components
 
-Layout analysis for complex statements
+### PDF Extraction
+- **pdfplumber**: Primary PDF text extraction with table support
+- **PyPDF2**: Fallback extraction method
+- **Multi-format Support**: Handles various bank statement layouts
+- **Robust Parsing**: Handles scanned PDFs and complex layouts
 
-Category Classification
-Random Forest classifier with TF-IDF features
+### Transaction Parsing
+- **Bank-Specific Patterns**: Custom regex patterns for different banks
+- **Date Recognition**: Multiple date format support
+- **Amount Extraction**: Handles various currency formats
+- **Description Cleaning**: Removes noise and extracts meaningful descriptions
 
-Rule-based fallback system
+### Category Classification
+- **Rule-Based System**: Pattern matching for common transaction types
+- **Confidence Scoring**: Provides confidence levels for classifications
+- **Extensible**: Easy to add new categories and patterns
+- **Fallback Logic**: Handles edge cases gracefully
 
-Trainable with new data
+## 🗄️ Database Models
 
-Database Models
-Transaction
-id (Primary Key)
+### PDFDocument
+- `filename`: Original PDF filename
+- `file_size`: File size in bytes
+- `processed`: Processing status
+- `bank_type`: Detected bank type
+- `account_type`: Account type (savings/current)
 
-user (ForeignKey)
+### Transaction
+- `date`: Transaction date
+- `description`: Transaction description
+- `amount`: Transaction amount (positive for credit, negative for debit)
+- `category`: Transaction category (food, shopping, transport, etc.)
+- `transaction_type`: Credit or debit
+- `confidence_score`: ML confidence score
 
-date (Date)
+## 📝 License
 
-description (Text)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-amount (Decimal)
+## 🙏 Acknowledgments
 
-type (Choice: Credit/Debit)
+- Django and Django REST Framework
+- Flask web framework
+- pdfplumber and PyPDF2 for PDF processing
+- Bootstrap for UI components
 
-category (Choice: Food, Shopping, etc.)
+---
 
-balance (Decimal)
-
-Development
-Adding New Bank Formats
-Update regex patterns in pdf_extractor.py
-
-Add new date formats in transaction parser
-
-Test with sample statements
-
-Training Category Model
-Add training data in category_classifier.py
-
-Run retraining method
-
-Validate with test transactions
-
-**Deployment**
-
-### Using Docker (Optional)
-    ```bash
-    docker-compose up --build
+**Made with ❤️ for financial data automation**
