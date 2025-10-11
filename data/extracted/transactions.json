@@ -1,0 +1,44 @@
+{
+    "sample_transactions": [
+      {
+        "date": "2024-01-15",
+        "description": "GROCERY STORE PURCHASE",
+        "amount": -85.50,
+        "category": "food",
+        "type": "debit"
+      },
+      {
+        "date": "2024-01-14",
+        "description": "AMAZON ONLINE SHOPPING",
+        "amount": -45.99,
+        "category": "shopping",
+        "type": "debit"
+      },
+      {
+        "date": "2024-01-13",
+        "description": "SALARY DEPOSIT",
+        "amount": 2500.00,
+        "category": "income",
+        "type": "credit"
+      },
+      {
+        "date": "2024-01-12",
+        "description": "GAS STATION TRANSACTION",
+        "amount": -35.75,
+        "category": "transport",
+        "type": "debit"
+      },
+      {
+        "date": "2024-01-11",
+        "description": "INTERNET BILL PAYMENT",
+        "amount": -79.99,
+        "category": "bills",
+        "type": "debit"
+      }
+    ],
+    "extraction_settings": {
+      "supported_banks": ["chase", "bank of america", "wells fargo", "citi", "capital one"],
+      "date_format": "YYYY-MM-DD",
+      "currency": "USD"
+    }
+  }

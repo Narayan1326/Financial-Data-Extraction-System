@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Transactions - Financial Data Extraction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">AI Financial Extractor</a>
+            <a href="/" class="btn btn-outline-light">Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h2>Search Transactions</h2>
+                <p class="text-muted">Search and filter extracted transaction data</p>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <form id="searchForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="dateFrom" class="form-label">Date From</label>
+                                        <input type="date" class="form-control" id="dateFrom">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="dateTo" class="form-label">Date To</label>
+                                        <input type="date" class="form-control" id="dateTo">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category">
+                                    <option value="">All Categories</option>
+                                    <option value="food">Food & Dining</option>
+                                    <option value="shopping">Shopping</option>
+                                    <option value="transport">Transportation</option>
+                                    <option value="entertainment">Entertainment</option>
+                                    <option value="bills">Bills & Utilities</option>
+                                    <option value="income">Income</option>
+                                    <option value="transfer">Transfers</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="minAmount" class="form-label">Min Amount</label>
+                                <input type="number" class="form-control" id="minAmount" step="0.01">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="maxAmount" class="form-label">Max Amount</label>
+                                <input type="number" class="form-control" id="maxAmount" step="0.01">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" id="searchBtn">
+                                <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                                Search Transactions
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Add these new filter options to the existing form -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="bankType" class="form-label">Bank Type</label>
+            <select class="form-select" id="bankType">
+                <option value="">All Banks</option>
+                <option value="hdfc">HDFC Bank</option>
+                <option value="indian bank">Indian Bank</option>
+                <option value="sbi">State Bank of India</option>
+                <option value="icici">ICICI Bank</option>
+                <option value="axis">Axis Bank</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="transactionType" class="form-label">Transaction Type</label>
+            <select class="form-select" id="transactionType">
+                <option value="">All Types</option>
+                <option value="credit">Credit Only</option>
+                <option value="debit">Debit Only</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+                <div id="results" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const searchBtn = document.getElementById('searchBtn');
+            const spinner = searchBtn.querySelector('.spinner-border');
+            const resultsDiv = document.getElementById('results');
+            
+            // Show loading state
+            searchBtn.disabled = true;
+            spinner.classList.remove('d-none');
+            
+            const searchData = {
+                date_from: document.getElementById('dateFrom').value,
+                date_to: document.getElementById('dateTo').value,
+                category: document.getElementById('category').value,
+                min_amount: document.getElementById('minAmount').value,
+                max_amount: document.getElementById('maxAmount').value
+            };
+            
+            try {
+                const response = await fetch('/search-transactions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(searchData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.transactions) {
+                    displayResults(data.transactions);
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="alert alert-info">
+                            <h5>No transactions found</h5>
+                            <p>Try adjusting your search criteria</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h5>Error searching transactions</h5>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            } finally {
+                searchBtn.disabled = false;
+                spinner.classList.add('d-none');
+            }
+        });
+        
+        function displayResults(transactions) {
+            const resultsDiv = document.getElementById('results');
+            let html = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Found ${transactions.length} transactions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Amount</th>
+                                        <th>Category</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+            `;
+            
+            transactions.forEach(transaction => {
+                const amountClass = transaction.amount < 0 ? 'text-danger' : 'text-success';
+                html += `
+                    <tr>
+                        <td>${transaction.date}</td>
+                        <td>${transaction.description}</td>
+                        <td class="${amountClass}">$${Math.abs(transaction.amount).toFixed(2)}</td>
+                        <td><span class="badge bg-secondary">${transaction.category}</span></td>
+                        <td><span class="badge ${transaction.type === 'debit' ? 'bg-danger' : 'bg-success'}">${transaction.type}</span></td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
