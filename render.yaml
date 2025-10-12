@@ -3,15 +3,12 @@ services:
   - type: pserv
     name: financial-extraction-db
     plan: free
-    disk:
-      name: db-disk
-      mountPath: /var/lib/postgresql/data
-      sizeGB: 1
+    startCommand: postgres
 
   # Django Backend API Service
   - type: web
     name: financial-extraction-backend
-    env: python
+    runtime: python
     plan: free
     buildCommand: |
       cd backend &&
@@ -37,15 +34,11 @@ services:
           name: financial-extraction-db
           property: connectionString
     healthCheckPath: /api/categories/
-    disk:
-      name: backend-disk
-      mountPath: /opt/render/project/src/backend/media
-      sizeGB: 1
 
   # Flask Frontend Service
   - type: web
     name: financial-extraction-frontend
-    env: python
+    runtime: python
     plan: free
     buildCommand: |
       cd frontend &&
