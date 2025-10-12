@@ -3,7 +3,6 @@ services:
   - type: pserv
     name: financial-extraction-db
     plan: free
-    startCommand: postgres
 
   # Django Backend API Service
   - type: web
