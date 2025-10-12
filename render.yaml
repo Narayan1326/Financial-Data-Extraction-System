@@ -3,7 +3,6 @@ services:
   - type: pserv
     name: financial-extraction-db
     plan: free
-    startCommand: postgres
 
   # Django Backend API Service
   - type: web
@@ -31,6 +30,7 @@ services:
       - key: DATABASE_URL
         fromService:
           name: financial-extraction-db
+          type: pserv
           property: connectionString
     healthCheckPath: /api/categories/
 
