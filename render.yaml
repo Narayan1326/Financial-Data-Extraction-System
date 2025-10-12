@@ -3,6 +3,7 @@ services:
   - type: pserv
     name: financial-extraction-db
     plan: free
+    startCommand: postgres
 
   # Django Backend API Service
   - type: web
@@ -28,9 +29,8 @@ services:
       - key: CORS_ALLOWED_ORIGINS
         value: "https://financial-extraction-frontend.onrender.com,http://localhost:5000"
       - key: DATABASE_URL
-        fromService:
+        fromDatabase:
           name: financial-extraction-db
-          type: pserv
           property: connectionString
     healthCheckPath: /api/categories/
 
