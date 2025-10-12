@@ -90,6 +90,23 @@ A comprehensive system for extracting structured financial data from PDF bank st
 ```bash
 docker-compose up --build
 ```
+## 🏆 Deployment 
+
+### On Render
+
+- Push your code to GitHub
+- Go to [render.com](https://render.com/)
+- Click "New +" → "Blueprint"
+- Connect your GitHub repository
+- Select your repository
+- Click "Apply"
+
+_Render will automatically :_ 
+
+- Detect the render.yaml file
+- Deploy both services
+- Set up environment variables
+- Provide URLs for both services
 
 ## 🎯 Usage
 
