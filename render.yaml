@@ -1,10 +1,9 @@
-services:
+databases:
   # PostgreSQL Database
-  - type: pserv
-    name: financial-extraction-db
+  - name: financial-extraction-db
     plan: free
-    startCommand: postgres
 
+services:
   # Django Backend API Service
   - type: web
     name: financial-extraction-backend
