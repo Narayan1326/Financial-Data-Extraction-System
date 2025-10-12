@@ -1,0 +1,63 @@
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: financial-extraction-db
+    plan: free
+    disk:
+      name: db-disk
+      mountPath: /var/lib/postgresql/data
+      sizeGB: 1
+
+  # Django Backend API Service
+  - type: web
+    name: financial-extraction-backend
+    env: python
+    plan: free
+    buildCommand: |
+      cd backend &&
+      pip install -r requirements.txt &&
+      python manage.py migrate
+    startCommand: |
+      cd backend &&
+      python manage.py runserver 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: financial_extraction.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: "financial-extraction-backend.onrender.com,localhost,127.0.0.1"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://financial-extraction-frontend.onrender.com,http://localhost:5000"
+      - key: DATABASE_URL
+        fromService:
+          type: pserv
+          name: financial-extraction-db
+          property: connectionString
+    healthCheckPath: /api/categories/
+    disk:
+      name: backend-disk
+      mountPath: /opt/render/project/src/backend/media
+      sizeGB: 1
+
+  # Flask Frontend Service
+  - type: web
+    name: financial-extraction-frontend
+    env: python
+    plan: free
+    buildCommand: |
+      cd frontend &&
+      pip install -r requirements.txt
+    startCommand: |
+      cd frontend &&
+      python app.py
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: BACKEND_URL
+        value: https://financial-extraction-backend.onrender.com/api
+      - key: PORT
+        value: 10000
+    healthCheckPath: /
